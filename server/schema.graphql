@@ -1,7 +1,7 @@
 type Query {
   hello: String!
-  todoList: [Todo!]!
-  user: [User]
+  todoList: [Todo!]
+  user: User
 }
 
 type Mutation {
@@ -20,6 +20,9 @@ type Mutation {
     completeBy: String
     urgent: Boolean
   ): Todo
+  login(email: String!, password: String!): User
+  signup(email: String!, password: String!): User
+  logout: String
 }
 
 type Todo {
