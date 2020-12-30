@@ -20,7 +20,7 @@ type Mutation {
     completeBy: String
     urgent: Boolean
   ): Todo
-  login(email: String!, password: String!): User
+  login(email: String!, password: String!): Token
   signup(email: String!, password: String!): User
   logout: String
 }
@@ -40,4 +40,9 @@ type User {
   password: String
   email: String
   todos: [Todo]
+}
+
+type Token {
+  _id: String
+  user: ID
 }

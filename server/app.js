@@ -3,7 +3,7 @@
 //=====================
 import mongoose from "mongoose";
 import mongo from "./mongo.js";
-import { User, Todo } from "./models/index.js";
+import { User, Todo, Token } from "./models/index.js";
 mongo();
 
 //=====================
@@ -28,11 +28,15 @@ const server = new ApolloServer({
   },
   typeDefs: fs.readFileSync(path.join(__dirname, "schema.graphql"), "utf8"),
   resolvers,
-  context: {
-    mongo,
-    User,
-    Todo,
-    user: null
+  context: ({ req }) => {
+    const token = req.headers.authorization || "";
+
+    const user = Token.getUser(token);
+    return {
+      mongo,
+      models: { User, Todo, Token },
+      user
+    };
   }
 });
 
