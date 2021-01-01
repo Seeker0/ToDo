@@ -79,7 +79,7 @@ const Todo = props => {
   });
 
   return (
-    <div>
+    <div className={`${todo.completed ? "darkGray" : ""}`}>
       <div>
         {todo.title} ({todo.description || "I am empty"})
       </div>

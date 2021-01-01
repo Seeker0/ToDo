@@ -8,8 +8,21 @@ input {
   max-width: 500px;
 }
 
+.todo {
+  margin: 3px;
+  border-color: black;
+}
+
 .gray {
   color: #828282;
+}
+
+.darkGray {
+  background-color: #bdbdbd;
+}
+
+.red {
+  color: #ff0000;
 }
 
 .orange {

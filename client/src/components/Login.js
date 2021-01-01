@@ -59,17 +59,6 @@ const Login = function() {
       <h4 className="mv3">{formState.login ? "Login" : "Sign Up"}</h4>
 
       <div className="flex flex-column">
-        {!formState.login && (
-          <input
-            value={formState.username}
-            onChange={e =>
-              setFormState({ ...formState, username: e.target.value })
-            }
-            type="text"
-            placeholder="Username"
-          />
-        )}
-
         <input
           value={formState.email}
           onChange={e => setFormState({ ...formState, email: e.target.value })}

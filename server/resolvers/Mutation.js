@@ -25,7 +25,9 @@ const Mutation = {
     const todo = await context.models.Todo.findByIdAndDelete(args.id);
     const index = user.todos.findIndex(todo._id);
 
-    user.todos = user.todos.splice(index, 1);
+    const userTodos = user.todos.slice();
+    usetTodos.splice(index, 1);
+    user.todos = userTodos;
     await user.save();
     return todo;
   },
