@@ -1,10 +1,12 @@
-import React from "react";
-import { CreateTodo, Header, TodoList, Login } from "./index";
-import { Switch, Route } from "react-router-dom";
-const token = localStorage.getItem("token");
+import React, { useEffect } from "react";
+import { CreateTodo, Header, TodoList, Login, Todo } from "./index";
+import { Switch, Route, withRouter, useHistory } from "react-router-dom";
+import { AUTH_TOKEN } from "../constants";
 
-const App = () =>
-  token ? (
+const App = function() {
+  let token = localStorage.getItem(AUTH_TOKEN);
+
+  return token ? (
     <div className="center w85">
       <Header />
 
@@ -13,6 +15,7 @@ const App = () =>
           <Route exact path="/" component={TodoList} />
           <Route exact path="/create" component={CreateTodo} />
           <Route exact path="/login" component={Login} />
+          <Route exact path="/todo" component={Todo} />
         </Switch>
       </div>
     </div>
@@ -25,5 +28,6 @@ const App = () =>
       </div>
     </div>
   );
+};
 
-export default App;
+export default withRouter(App);

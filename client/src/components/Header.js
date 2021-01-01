@@ -1,10 +1,29 @@
 import React from "react";
-import { useHistory } from "react-router";
-import { Link, withRouter } from "react-router-dom";
+import { AUTH_TOKEN } from "../constants";
+import { useHistory, withRouter, Link } from "react-router-dom";
+import { useMutation, gql } from "@apollo/client";
 
-const Header = () => {
+const LOGOUT_MUTATION = gql`
+  mutation LogoutMutation {
+    logout {
+      _id
+      user
+      message
+    }
+  }
+`;
+
+const Header = function() {
   const history = useHistory();
-  const token = localStorage.getItem("token");
+  let token = localStorage.getItem(AUTH_TOKEN);
+
+  const [logout] = useMutation(LOGOUT_MUTATION, {
+    variables: {},
+    onCompleted: ({ logout }) => {
+      localStorage.setItem(AUTH_TOKEN, "");
+      return history.push("/");
+    }
+  });
 
   return (
     <div className="flex pa1 justify-between nowrap orange">
@@ -22,13 +41,7 @@ const Header = () => {
 
       <div className="flex flex-fixed">
         {token && (
-          <div
-            className="ml1 pointer black"
-            onClick={() => {
-              localStorage.removeItem("token");
-              history.push(`/`);
-            }}
-          >
+          <div className="ml1 pointer black" onClick={logout}>
             logout
           </div>
         )}
@@ -37,4 +50,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default withRouter(Header);

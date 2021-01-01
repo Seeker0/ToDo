@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router";
+import { useHistory } from "react-router-dom";
 import { useMutation, gql } from "@apollo/client";
 
 const CREATE_TODO_MUTATION = gql`
@@ -81,35 +81,19 @@ const CreateTodo = () => {
             setFormState({ ...formState, completeBy: e.target.value });
           }}
           type="text"
-          placeholder="Complete by Date"
+          placeholder="Complete by Date mm/dd/yy"
         />
 
         <label>Urgent Task?</label>
-        <div className="form-check">
-          <label>
-            <input
-              className="form-check-input"
-              type="radio"
-              value={false}
-              onChange={e => {
-                setFormState({ ...formState, urgent: false });
-              }}
-              checked={!formState.urgent}
-            />
-            No
-          </label>
-        </div>
 
         <div className="form-check">
           <label>
             <input
               className="form-check-input"
-              type="radio"
-              value={true}
+              type="checkbox"
               onChange={e => {
-                setFormState({ ...setFormState, urgent: true });
+                setFormState({ ...formState, urgent: !formState.urgent });
               }}
-              checked={formState.urgent}
             />
             Yes
           </label>

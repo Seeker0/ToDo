@@ -22,21 +22,19 @@ import path from "path";
 const __dirname = path.resolve();
 
 const server = new ApolloServer({
-  cors: {
-    origin: "*",
-    credentials: true
-  },
   typeDefs: fs.readFileSync(path.join(__dirname, "schema.graphql"), "utf8"),
   resolvers,
   context: ({ req }) => {
-    const token = req.headers.authorization || "";
-
-    const user = Token.getUser(token);
+    console.log(req.body);
     return {
+      req,
       mongo,
-      models: { User, Todo, Token },
-      user
+      models: { User, Todo, Token }
     };
+  },
+  formatError: e => {
+    console.error(e);
+    return e;
   }
 });
 

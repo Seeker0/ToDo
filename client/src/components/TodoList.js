@@ -1,5 +1,6 @@
 import React from "react";
 import Todo from "./Todo";
+import { Link } from "react-router-dom";
 import { useQuery, gql } from "@apollo/client";
 
 const TODOLIST_QUERY = gql`
@@ -24,7 +25,18 @@ const TodoList = () => {
       {data && (
         <>
           {data.todoList.map(todo => (
-            <Todo key={todo._id} todo={todo} />
+            <Link
+              to={{
+                pathname: "/todo",
+                state: {
+                  todo: todo
+                }
+              }}
+              key={todo._id}
+              className="no-underline black"
+            >
+              <Todo key={todo._id} todo={todo} />
+            </Link>
           ))}
         </>
       )}

@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
 const saltRounds = 10;
+import { getToken, getUser, generate, verify } from "../helpers.js";
 
 const Mutation = {
   addTodo: async (parent, args, context) => {
@@ -12,39 +13,51 @@ const Mutation = {
       urgent: args.urgent || false
     };
 
+    const user = await getUser(context);
     const newTodo = await context.models.Todo.create({ ...todo });
+    user.todos.push(newTodo._id);
+    await user.save();
     return newTodo;
   },
 
   deleteTodo: async (parent, args, context) => {
+    const user = await getUser(context);
     const todo = await context.models.Todo.findByIdAndDelete(args.id);
+    const index = user.todos.findIndex(todo._id);
+
+    user.todos = user.todos.splice(index, 1);
+    await user.save();
     return todo;
   },
 
-  updateTodo: async (parent, args, context) => {
-    const todoToRemove = await context.models.Todo.findByIdAndUpdate(args.id, {
-      ...args
+  updateCompleted: async (parent, args, context) => {
+    const updatedTodo = await context.models.Todo.findByIdAndUpdate(args.id, {
+      completed: args.completed
     });
-    return todoToRemove;
+    console.log(args);
+    console.log(updatedTodo);
+    return updatedTodo;
+  },
+
+  updateUrgent: async (parent, args, context) => {
+    const updatedTodo = await context.models.Todo.findByIdAndUpdate(args.id, {
+      urgent: args.urgent
+    });
+    console.log(args);
+    console.log(updatedTodo);
+    return updatedTodo;
   },
 
   login: async (parent, args, context) => {
     const user = await context.models.User.findOne({ email: args.email });
-    if (!user) return "Invalid email address";
 
-    const validUser = await bcrypt
-      .compare(args.password, user.password)
-      .then(res => {
-        return res;
-      });
+    if (!user) throw new Error("No user under the given email found.");
 
-    if (!validUser) return "Invalid Password";
+    const validUser = verify(args.password, user.password);
 
-    const id = await bcrypt.hash(args.email, saltRounds);
-    const token = await context.models.Token.create({
-      _id: id,
-      user: user._id
-    });
+    if (!validUser) throw new Error("Invalid Password");
+
+    const token = await context.models.Token.findOrCreate(user._id, args.email);
     return token;
   },
 
@@ -65,10 +78,15 @@ const Mutation = {
   },
 
   logout: async (parent, args, context) => {
-    const session = await context.models.Token.findByIdAndDelete(
-      context.user.session
-    );
-    return "Logout Successful";
+    let auth = context.req.get("authorization");
+    const token = await context.models.Token.findByIdAndDelete(auth);
+    const loggedOutToken = {
+      _id: token._id,
+      user: token.user,
+      message: "Logged out successfully"
+    };
+    console.log(loggedOutToken);
+    return loggedOutToken;
   }
 };
 

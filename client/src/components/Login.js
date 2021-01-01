@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router";
+import { AUTH_TOKEN } from "../constants";
+import { useHistory } from "react-router-dom";
 import { useMutation, gql } from "@apollo/client";
 
 const SIGNUP_MUTATION = gql`
   mutation SignupMutation($email: String!, $password: String!) {
     signup(email: $email, password: $password) {
-      token
+      _id
+      user
     }
   }
 `;
@@ -13,35 +15,44 @@ const SIGNUP_MUTATION = gql`
 const LOGIN_MUTATION = gql`
   mutation LoginMutation($email: String!, $password: String!) {
     login(email: $email, password: $password) {
-      token
+      _id
+      user
     }
   }
 `;
 
-const Login = () => {
+const Login = function() {
   const history = useHistory();
-
   const [formState, setFormState] = useState({
     login: true,
     email: "",
     password: "",
-    username: ""
+    name: "",
+    authToken: localStorage.getItem(AUTH_TOKEN)
   });
 
-  const mutationConfig = {
+  const [login] = useMutation(LOGIN_MUTATION, {
     variables: {
       email: formState.email,
       password: formState.password
     },
-    onCompleted: ({ token }) => {
-      localStorage.setItem("token", token._id);
-      history.push("/");
+    onCompleted: ({ login }) => {
+      localStorage.setItem(AUTH_TOKEN, login._id);
+      return history.push("/");
     }
-  };
+  });
 
-  const [login] = useMutation(LOGIN_MUTATION, mutationConfig);
-
-  const [signup] = useMutation(SIGNUP_MUTATION, mutationConfig);
+  const [signup] = useMutation(SIGNUP_MUTATION, {
+    variables: {
+      name: formState.name,
+      email: formState.email,
+      password: formState.password
+    },
+    onCompleted: ({ signup }) => {
+      localStorage.setItem(AUTH_TOKEN, signup._id);
+      return history.push("/");
+    }
+  });
 
   return (
     <div>
