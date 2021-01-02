@@ -1,6 +1,6 @@
 type Query {
   hello: String!
-  todoList: [Todo!]
+  todoList(filter: String): [Todo!]
   user: User
 }
 

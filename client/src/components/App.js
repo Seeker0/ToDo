@@ -1,5 +1,5 @@
 import React from "react";
-import { CreateTodo, Header, TodoList, Login, Todo } from "./index";
+import { CreateTodo, Header, TodoList, Login, Todo, Search } from "./index";
 import { Switch, Route, withRouter } from "react-router-dom";
 import { AUTH_TOKEN } from "../constants";
 
@@ -16,6 +16,7 @@ const App = function() {
           <Route exact path="/create" component={CreateTodo} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/todo" component={Todo} />
+          <Route exact path="/search" component={Search} />
         </Switch>
       </div>
     </div>
