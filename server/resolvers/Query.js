@@ -1,8 +1,10 @@
+import { getUserTodos } from "../helpers.js";
+
 const Query = {
   hello: () => "Hello World!",
   todoList: async (parent, args, context) => {
-    const todos = await context.models.Todo.find();
-    console.log(todos);
+    const todos = await getUserTodos(context);
+
     return todos;
   },
   user: async (parent, args, context) => {

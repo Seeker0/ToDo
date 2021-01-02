@@ -26,12 +26,18 @@ const getToken = async context => {
 const getUser = async context => {
   authorize(context);
   const { user } = await context.models.Token.getUser(context.auth);
-  console.log(user);
   return user;
+};
+
+const getUserTodos = async context => {
+  const user = await getUser(context);
+
+  const { todos } = await context.models.User.getTodos(user._id);
+  return todos;
 };
 
 const generate = async str => await bcrypt.hash(str, saltRounds);
 
 const verify = async (password, hash) => await bcrypt.compare(password, hash);
 
-export { getToken, getUser, generate, verify };
+export { getToken, getUser, getUserTodos, generate, verify };

@@ -3,7 +3,7 @@ import Todo from "./Todo";
 import { Link } from "react-router-dom";
 import { useQuery, gql } from "@apollo/client";
 
-const TODOLIST_QUERY = gql`
+export const TODOLIST_QUERY = gql`
   {
     todoList {
       _id
@@ -18,70 +18,85 @@ const TODOLIST_QUERY = gql`
 `;
 
 const TodoList = () => {
-  const { loading, error, data } = useQuery(TODOLIST_QUERY);
-
-  let todoList;
-  todoList = data ? (data.todoList ? data.todoList : []) : [];
-  const open = todoList.filter(val => !val.completed);
-  const complete = todoList.filter(val => val.completed);
-  const urgent = todoList.filter(val => val.urgent);
-  const all = todoList;
-
   const [state, setState] = useState({
-    showing: open || []
+    showing: "open",
+    open: [{ _id: 0, title: "Loading....", description: "" }],
+    completed: null,
+    urgent: null,
+    all: null
   });
 
-  if (loading) return "Loading...";
-  if (error) return `Error! ${error.message}`;
-  if (!data) throw new Error("no data");
+  useQuery(TODOLIST_QUERY, {
+    onCompleted: ({ todoList }) => {
+      const openOnly = todoList.filter(val => !val.completed);
+      const stateUpdate = {
+        showing: "open",
+        open: openOnly,
+        completed: todoList.filter(val => val.completed),
+        urgent: todoList.filter(val => val.urgent),
+        all: todoList
+      };
 
-  const toggleShowing = set => setState({ showing: set });
+      setState(stateUpdate);
+    }
+  });
+
+  const buttons = [
+    <button
+      name="open"
+      key="open"
+      className="pointer mr2 button"
+      onClick={() => toggleShowing("open")}
+    >
+      Show Open
+    </button>,
+    <button
+      name="completed"
+      key="completed"
+      className="pointer mr2 button"
+      onClick={() => toggleShowing("completed")}
+    >
+      Completed Only
+    </button>,
+    <button
+      name="urgent"
+      key="urgent"
+      className="pointer button"
+      onClick={() => toggleShowing("urgent")}
+    >
+      Urgent Only
+    </button>,
+    <button
+      name="all"
+      key="all"
+      className="pointer button"
+      onClick={() => toggleShowing("all")}
+    >
+      Show All
+    </button>
+  ];
+
+  const toggleShowing = set => setState({ ...state, showing: set });
 
   return (
     <div>
-      {data && (
-        <>
-          {state.showing.map(todo => (
-            <Link
-              to={{
-                pathname: "/todo",
-                state: {
-                  todo: todo
-                }
-              }}
-              key={todo._id}
-              className={`no-underline todo ${todo.urgent ? "red" : "black"}`}
-            >
-              <Todo key={todo._id} todo={todo} />
-            </Link>
-          ))}
-        </>
-      )}
+      {state[state.showing].map(todo => (
+        <Link
+          to={{
+            pathname: "/todo",
+            state: {
+              todo: todo
+            }
+          }}
+          key={todo._id}
+          className={`no-underline todo ${todo.urgent ? "red" : "black"}`}
+        >
+          <Todo key={todo._id} todo={todo} />
+        </Link>
+      ))}
+
       <div className="flex mt3">
-        <button
-          className="pointer mr2 button"
-          onClick={() => toggleShowing(open)}
-        >
-          Show Open
-        </button>
-
-        <button
-          className="pointer mr2 button"
-          onClick={() => toggleShowing(complete)}
-        >
-          Completed Only
-        </button>
-
-        <button
-          className="pointer button"
-          onClick={() => toggleShowing(urgent)}
-        >
-          Urgent Only
-        </button>
-
-        <button className="pointer button" onClick={() => toggleShowing(all)}>
-          Show All
-        </button>
+        {buttons.filter(button => button.props.name !== state.showing)}
       </div>
     </div>
   );

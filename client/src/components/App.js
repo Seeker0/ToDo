@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { CreateTodo, Header, TodoList, Login, Todo } from "./index";
-import { Switch, Route, withRouter, useHistory } from "react-router-dom";
+import { Switch, Route, withRouter } from "react-router-dom";
 import { AUTH_TOKEN } from "../constants";
 
 const App = function() {

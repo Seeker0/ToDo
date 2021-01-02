@@ -14,5 +14,10 @@ const userSchema = new Schema({
   todos: [{ type: mongoose.Schema.Types.ObjectId, ref: "Todo" }]
 });
 
+userSchema.statics.getTodos = async function(id) {
+  const todos = await this.findById(id).populate("todos");
+  return todos;
+};
+
 const User = model("User", userSchema);
 export default User;

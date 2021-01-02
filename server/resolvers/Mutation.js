@@ -36,8 +36,6 @@ const Mutation = {
     const updatedTodo = await context.models.Todo.findByIdAndUpdate(args.id, {
       completed: args.completed
     });
-    console.log(args);
-    console.log(updatedTodo);
     return updatedTodo;
   },
 
@@ -45,8 +43,6 @@ const Mutation = {
     const updatedTodo = await context.models.Todo.findByIdAndUpdate(args.id, {
       urgent: args.urgent
     });
-    console.log(args);
-    console.log(updatedTodo);
     return updatedTodo;
   },
 
@@ -87,7 +83,6 @@ const Mutation = {
       user: token.user,
       message: "Logged out successfully"
     };
-    console.log(loggedOutToken);
     return loggedOutToken;
   }
 };

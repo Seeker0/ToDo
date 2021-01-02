@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useMutation, gql } from "@apollo/client";
+import { TODOLIST_QUERY } from "./TodoList";
 
 const CREATE_TODO_MUTATION = gql`
   mutation PostMutation(
@@ -42,6 +43,18 @@ const CreateTodo = () => {
       description: formState.description,
       completeBy: formState.completeBy,
       urgent: formState.urgent
+    },
+    update: (cache, { data: { addTodo } }) => {
+      const data = cache.readQuery({
+        query: TODOLIST_QUERY
+      });
+
+      cache.writeQuery({
+        query: TODOLIST_QUERY,
+        data: {
+          todoList: [addTodo, ...data.todoList]
+        }
+      });
     },
     onCompleted: () => history.push("/")
   });
