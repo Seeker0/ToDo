@@ -55,7 +55,6 @@ const Todo = props => {
       completed: state.completed
     },
     onCompleted: data => {
-      console.log(data);
       return history.push("/");
     }
   });
@@ -75,7 +74,7 @@ const Todo = props => {
               type="checkbox"
               checked={state.urgent}
               onChange={e => {
-                setState({ ...state, urgent: true, completed: false });
+                setState({ ...state, urgent: !state.urgent, completed: false });
               }}
             />
             Urgent
@@ -87,7 +86,11 @@ const Todo = props => {
               type="checkbox"
               checked={state.completed}
               onChange={e => {
-                setState({ ...state, completed: true, urgent: false });
+                setState({
+                  ...state,
+                  completed: !state.completed,
+                  urgent: false
+                });
               }}
             />
             Completed
