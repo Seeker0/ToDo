@@ -10,7 +10,16 @@ input {
 
 .todo {
   margin: 3px;
+  border-width: medium;
+  border-radius: 3px;
   border-color: black;
+  display: flex;
+  justify-content: space-between;
+}
+
+.todoText {
+  display: flex;
+  justify-content: space-around;
 }
 
 .gray {
@@ -19,6 +28,10 @@ input {
 
 .darkGray {
   background-color: #bdbdbd;
+}
+
+.selected {
+  color: darkGray;
 }
 
 .red {

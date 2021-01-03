@@ -40,42 +40,26 @@ const TodoList = () => {
     }
   });
 
-  const buttons = [
-    <button
-      name="open"
-      key="open"
-      className="pointer mr2 button"
-      onClick={() => toggleShowing("open")}
-    >
-      Show Open
-    </button>,
-    <button
-      name="completed"
-      key="completed"
-      className="pointer mr2 button"
-      onClick={() => toggleShowing("completed")}
-    >
-      Completed Only
-    </button>,
-    <button
-      name="urgent"
-      key="urgent"
-      className="pointer button"
-      onClick={() => toggleShowing("urgent")}
-    >
-      Urgent Only
-    </button>,
-    <button
-      name="all"
-      key="all"
-      className="pointer button"
-      onClick={() => toggleShowing("all")}
-    >
-      Show All
-    </button>
-  ];
-
   const toggleShowing = set => setState({ ...state, showing: set });
+  const buttons = (() => {
+    let buttons = [];
+    for (let key in state) {
+      const selected = state.showing === key;
+      if (key === "showing") continue;
+      buttons.push(
+        <button
+          name={key}
+          key={key}
+          disabled={selected}
+          className={`pointer mr2 ${selected ? "selected" : "button"}`}
+          onClick={() => toggleShowing(key)}
+        >
+          {key}
+        </button>
+      );
+    }
+    return buttons;
+  })();
 
   return (
     <div>
@@ -83,9 +67,7 @@ const TodoList = () => {
         <TodoLink key={todo._id} todo={todo} />
       ))}
 
-      <div className="flex mt3">
-        {buttons.filter(button => button.props.name !== state.showing)}
-      </div>
+      <div className="flex mt3">{buttons}</div>
     </div>
   );
 };

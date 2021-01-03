@@ -9,6 +9,16 @@ const authorize = context => {
   return context;
 };
 
+const urgentSort = arr => {
+  arr.sort((a, b) => {
+    const [at, bt] = [a.urgent, b.urgent];
+    if ((at && bt) || (!at && !bt)) return 0;
+    if (at && !bt) return -1;
+    if (!at && bt) return 1;
+  });
+  return arr;
+};
+
 const getToken = async context => {
   authorize(context);
   const token = await context.models.Token.findById(context.auth);
@@ -33,7 +43,7 @@ const getUserTodos = async context => {
   const user = await getUser(context);
 
   const { todos } = await context.models.User.getTodos(user._id);
-  return todos;
+  return urgentSort(todos);
 };
 
 const generate = async str => await bcrypt.hash(str, saltRounds);

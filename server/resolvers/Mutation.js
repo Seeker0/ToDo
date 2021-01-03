@@ -32,17 +32,17 @@ const Mutation = {
     return todo;
   },
 
-  updateCompleted: async (parent, args, context) => {
-    const updatedTodo = await context.models.Todo.findByIdAndUpdate(args.id, {
-      completed: args.completed
-    });
-    return updatedTodo;
-  },
+  updateTodo: async (parent, args, context) => {
+    const updateData = { urgent: args.urgent, completed: args.completed },
+      { id } = args;
 
-  updateUrgent: async (parent, args, context) => {
-    const updatedTodo = await context.models.Todo.findByIdAndUpdate(args.id, {
-      urgent: args.urgent
-    });
+    const updatedTodo = await context.models.Todo.findByIdAndUpdate(
+      args.id,
+      updateData,
+      { new: true }
+    );
+
+    console.log(updatedTodo);
     return updatedTodo;
   },
 

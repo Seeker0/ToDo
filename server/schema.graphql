@@ -12,6 +12,7 @@ type Mutation {
     urgent: Boolean
   ): Todo
   deleteTodo(id: String!): Todo
+  updateTodo(id: String!, urgent: Boolean, completed: Boolean): Todo
   updateCompleted(id: String!, completed: Boolean!): Todo
   updateUrgent(id: String!, urgent: Boolean!): Todo
   login(email: String!, password: String!): Token

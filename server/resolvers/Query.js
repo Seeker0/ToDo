@@ -7,7 +7,7 @@ const Query = {
     const todos = await getUserTodos(context);
 
     if (filter) {
-      filter = RegExp(filter);
+      filter = RegExp(filter, "i");
       return todos.filter(
         todo => filter.test(todo.title) || filter.test(todo.description)
       );
