@@ -1,29 +1,7 @@
 import React, { useState } from "react";
 import { useLocation, useHistory } from "react-router-dom";
-import { useMutation, gql } from "@apollo/client";
-
-const UPDATE_MUTATION = gql`
-  mutation UpdateMutation($id: String!, $urgent: Boolean, $completed: Boolean) {
-    updateTodo(id: $id, urgent: $urgent, completed: $completed) {
-      _id
-      title
-      description
-      enteredOn
-      completeBy
-      completed
-      urgent
-    }
-  }
-`;
-
-const DELETE_MUTATION = gql`
-  mutation DeleteMutation($id: String!) {
-    deleteTodo(id: $id) {
-      _id
-      title
-    }
-  }
-`;
+import { useMutation } from "@apollo/client";
+import { UPDATE_MUTATION, DELETE_MUTATION } from "../gqls";
 
 const Todo = props => {
   const location = useLocation();

@@ -1,20 +1,7 @@
 import React, { useState } from "react";
 import TodoLink from "./TodoLink";
-import { useQuery, gql } from "@apollo/client";
-
-export const TODOLIST_QUERY = gql`
-  {
-    todoList {
-      _id
-      title
-      description
-      enteredOn
-      completed
-      completeBy
-      urgent
-    }
-  }
-`;
+import { useQuery } from "@apollo/client";
+import { TODOLIST_QUERY } from "../gqls";
 
 const TodoList = () => {
   const [state, setState] = useState({
