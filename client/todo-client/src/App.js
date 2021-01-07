@@ -1,7 +1,16 @@
-import logo from './logo.svg';
-import './App.css';
+import logo from "./logo.svg";
+import "./App.css";
+import fetch from "node-fetch";
 
 function App() {
+  let response = fetch("http://localhost:4000")
+    .then(res => res.text())
+    .then(text => {
+      console.log(text);
+      return text;
+    })
+    .catch(e => console.error(e));
+
   return (
     <div className="App">
       <header className="App-header">
@@ -15,7 +24,7 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Learn React
+          ToDo
         </a>
       </header>
     </div>
