@@ -1,6 +1,6 @@
 type Query {
   hello: String!
-  todoList: [Todo!]
+  todoList(filter: String): [Todo!]
   user: User
 }
 
@@ -12,17 +12,12 @@ type Mutation {
     urgent: Boolean
   ): Todo
   deleteTodo(id: String!): Todo
-  updateTodo(
-    id: String!
-    title: String
-    description: String
-    completed: Boolean
-    completeBy: String
-    urgent: Boolean
-  ): Todo
-  login(email: String!, password: String!): User
-  signup(email: String!, password: String!): User
-  logout: String
+  updateTodo(id: String!, urgent: Boolean, completed: Boolean): Todo
+  updateCompleted(id: String!, completed: Boolean!): Todo
+  updateUrgent(id: String!, urgent: Boolean!): Todo
+  login(email: String!, password: String!): Token
+  signup(email: String!, password: String!): Token
+  logout: Token
 }
 
 type Todo {
@@ -40,4 +35,10 @@ type User {
   password: String
   email: String
   todos: [Todo]
+}
+
+type Token {
+  _id: String
+  user: ID
+  message: String
 }
