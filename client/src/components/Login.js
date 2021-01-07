@@ -1,25 +1,8 @@
 import React, { useState } from "react";
 import { AUTH_TOKEN } from "../constants";
 import { useHistory } from "react-router-dom";
-import { useMutation, gql } from "@apollo/client";
-
-const SIGNUP_MUTATION = gql`
-  mutation SignupMutation($email: String!, $password: String!) {
-    signup(email: $email, password: $password) {
-      _id
-      user
-    }
-  }
-`;
-
-const LOGIN_MUTATION = gql`
-  mutation LoginMutation($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
-      _id
-      user
-    }
-  }
-`;
+import { useMutation } from "@apollo/client";
+import { SIGNUP_MUTATION, LOGIN_MUTATION } from "../gqls";
 
 const Login = function() {
   const history = useHistory();

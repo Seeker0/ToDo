@@ -1,17 +1,8 @@
 import React from "react";
 import { AUTH_TOKEN } from "../constants";
 import { useHistory, withRouter, Link } from "react-router-dom";
-import { useMutation, gql } from "@apollo/client";
-
-const LOGOUT_MUTATION = gql`
-  mutation LogoutMutation {
-    logout {
-      _id
-      user
-      message
-    }
-  }
-`;
+import { useMutation } from "@apollo/client";
+import { LOGOUT_MUTATION } from "../gqls";
 
 const Header = function() {
   const history = useHistory();

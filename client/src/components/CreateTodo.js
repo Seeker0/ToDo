@@ -1,31 +1,7 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { useMutation, gql } from "@apollo/client";
-import { TODOLIST_QUERY } from "./TodoList";
-
-const CREATE_TODO_MUTATION = gql`
-  mutation PostMutation(
-    $title: String!
-    $description: String
-    $completeBy: String
-    $urgent: Boolean!
-  ) {
-    addTodo(
-      title: $title
-      description: $description
-      completeBy: $completeBy
-      urgent: $urgent
-    ) {
-      _id
-      title
-      description
-      enteredOn
-      completed
-      completeBy
-      urgent
-    }
-  }
-`;
+import { useMutation } from "@apollo/client";
+import { TODOLIST_QUERY, CREATE_TODO_MUTATION } from "../gqls";
 
 const CreateTodo = () => {
   const history = useHistory();

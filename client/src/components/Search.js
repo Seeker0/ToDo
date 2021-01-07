@@ -1,21 +1,7 @@
 import React, { useState } from "react";
 import { useLazyQuery } from "@apollo/client";
-import gql from "graphql-tag";
 import TodoLink from "./TodoLink";
-
-const SEARCH_QUERY = gql`
-  query SearchQuery($filter: String!) {
-    todoList(filter: $filter) {
-      _id
-      title
-      description
-      enteredOn
-      completed
-      completeBy
-      urgent
-    }
-  }
-`;
+import { SEARCH_QUERY } from "../gqls";
 
 const Search = () => {
   const [searchFilter, setSearchFilter] = useState("");
