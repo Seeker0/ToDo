@@ -9,45 +9,10 @@ mongo();
 //=====================
 //GraphQL
 //=====================
-
+import { Query, Mutation } from "./resolvers/index.js";
 const resolvers = {
-  Query: {
-    hello: () => "Hello World!",
-    todoList: async (parent, args, context) => {
-      const todos = await context.Todo.find();
-      return todos;
-    },
-    user: async (parent, args, context) => {
-      const users = await context.User.find();
-      return users;
-    }
-  },
-  Mutation: {
-    addTodo: async (parent, args, context) => {
-      const todo = {
-        title: args.title,
-        description: args.description || null,
-        enteredOn: new Date().toLocaleDateString("en-US"),
-        completeBy: args.completeBy || "open",
-        completed: false,
-        urgent: args.urgent || false
-      };
-
-      const newTodo = new context.Todo({ ...todo });
-      await newTodo.save();
-      return newTodo;
-    },
-    deleteTodo: async (parent, args, context) => {
-      const todo = await context.Todo.findByIdAndDelete(args.id);
-      return todo;
-    },
-    updateTodo: async (parent, args, context) => {
-      const todoToRemove = await context.Todo.findByIdAndUpdate(args.id, {
-        ...args
-      });
-      return todoToRemove;
-    }
-  }
+  Query,
+  Mutation
 };
 
 import { ApolloServer } from "apollo-server";
@@ -66,7 +31,8 @@ const server = new ApolloServer({
   context: {
     mongo,
     User,
-    Todo
+    Todo,
+    user: null
   }
 });
 
